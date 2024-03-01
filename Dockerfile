@@ -45,7 +45,7 @@ COPY ./subtensor/raw_testspec.json /
 COPY ./subtensor/node-subtensor /usr/local/bin/node-subtensor
 COPY ./subtensor/localnet.sh /subtensor/scripts/localnet.sh
 # Ensure localnet.sh is executable
-RUN chmod +x /usr/src/app/localnet.sh
+RUN chmod +x /subtensor/scripts/localnet.sh
 
 # Copy the rest of your application's source code from your host to your image filesystem.
 COPY . .
