@@ -1,0 +1,21 @@
+version: "3.8"
+
+volumes:
+  subnet-volume:
+services:
+  subtensor-localnet:
+    container_name: bittensor-basic-subnet
+    volumes:
+      - subnet-volume:/tmp/blockchain
+    image: hamzatrq/hip-subnet:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    cpu_count: 4
+    mem_limit: 40000000000
+    memswap_limit: 80000000000
+    command:
+      - /bin/bash
+      - -c
+      - |
+        /subtensor/scripts/localnet.sh
