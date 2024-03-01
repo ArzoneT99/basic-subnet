@@ -5,12 +5,12 @@ FROM ubuntu:20.04
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install Python and pip
-ARG PYTHON_VERSION=3.8.12
+ARG PYTHON_VERSION=3.10
 
 # Basic updates and necessary libraries
 RUN apt-get update && apt-get install -y --no-install-recommends \
     software-properties-common \
-    && add-apt-repository ppa:deadsnakes/ppa \
+    && add-apt-repository ppa:deadsnakes/ppa -y \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
     python${PYTHON_VERSION} \
