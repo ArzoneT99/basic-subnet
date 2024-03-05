@@ -49,4 +49,4 @@ COPY ./subtensor/localnet.sh /subtensor/scripts/localnet.sh
 RUN chmod +x /subtensor/scripts/localnet.sh
 # Copy the rest of your application's source code from your host to your image filesystem.
 COPY . .
-RUN chmod +x /scripts/run_subnet.sh
+# RUN chmod +x /scripts/run_subnet.sh
