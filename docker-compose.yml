@@ -18,4 +18,6 @@ services:
       - /bin/bash
       - -c
       - |
-        /subtensor/scripts/localnet.sh
+        /subtensor/scripts/localnet.sh &
+        sleep 15
+        /scripts/run_subnet.sh
