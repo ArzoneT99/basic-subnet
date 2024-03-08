@@ -7,6 +7,8 @@
 
 FULL_PATH="$SPEC_PATH$CHAIN.json"
 
+echo "*** Chainspec path: $FULL_PATH"
+
 if [ ! -d "$SPEC_PATH" ]; then
 	echo "*** Creating directory ${SPEC_PATH}..."
 	mkdir $SPEC_PATH
