@@ -2,7 +2,7 @@
 
 : "${CHAIN:=local}"
 : "${BUILD_BINARY:=0}"
-: "${SPEC_PATH:=specs/}"
+: "${SPEC_PATH:=/tmp/blockchain/}"
 : "${FEATURES:=pow-faucet}"
 
 FULL_PATH="$SPEC_PATH$CHAIN.json"
@@ -21,11 +21,6 @@ fi
 echo "*** Building chainspec..."
 node-subtensor build-spec --disable-default-bootnode --raw --chain $CHAIN > $FULL_PATH
 echo "*** Chainspec built and output to file"
-
-echo "*** Purging previous state..."
-node-subtensor purge-chain -y --base-path /tmp/blockchain/bob --chain="$FULL_PATH" >/dev/null 2>&1
-node-subtensor purge-chain -y --base-path /tmp/blockchain/alice --chain="$FULL_PATH" >/dev/null 2>&1
-echo "*** Previous chainstate purged"
 
 echo "*** Starting localnet nodes..."
 alice_start=(

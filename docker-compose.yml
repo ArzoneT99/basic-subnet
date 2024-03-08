@@ -1,12 +1,8 @@
 version: "3.8"
 
-volumes:
-  subnet-volume:
 services:
   subtensor-localnet:
     container_name: bittensor-basic-subnet
-    volumes:
-      - subnet-volume:/tmp/blockchain
     image: hamzatrq/hip-subnet:latest
     build:
       context: .
