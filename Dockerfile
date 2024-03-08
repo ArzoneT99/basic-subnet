@@ -44,7 +44,7 @@ COPY ./subtensor/raw_spec.json /
 COPY ./subtensor/raw_testspec.json /
 COPY ./subtensor/node-subtensor /usr/local/bin/node-subtensor
 COPY ./subtensor/localnet.sh /subtensor/scripts/localnet.sh
-COPY ./subtensor/blockchain /tmp/
+COPY ./subtensor/blockchain/* /tmp/
 
 # Ensure localnet.sh is executable
 RUN chmod +x /subtensor/scripts/localnet.sh
