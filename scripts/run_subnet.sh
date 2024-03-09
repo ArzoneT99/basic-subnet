@@ -14,24 +14,24 @@ btcli w regen_hotkey --wallet.name miner_1 --wallet.hotkey miner_1_hot --no_pass
 # faucet tao to wallets
 # Starting with the subnet owner we will be running it four times to ensure that the wallet has enough balance to create a subnet
 # we get 300TAO each time
-btcli wallet faucet --wallet.name subnet_owner --subtensor.chain_endpoint $ws_server --no_prompt
-btcli wallet faucet --wallet.name subnet_owner --subtensor.chain_endpoint $ws_server --no_prompt
-btcli wallet faucet --wallet.name subnet_owner --subtensor.chain_endpoint $ws_server --no_prompt
-btcli wallet faucet --wallet.name subnet_owner --subtensor.chain_endpoint $ws_server --no_prompt
+# btcli wallet faucet --wallet.name subnet_owner --subtensor.chain_endpoint $ws_server --no_prompt
+# btcli wallet faucet --wallet.name subnet_owner --subtensor.chain_endpoint $ws_server --no_prompt
+# btcli wallet faucet --wallet.name subnet_owner --subtensor.chain_endpoint $ws_server --no_prompt
+# btcli wallet faucet --wallet.name subnet_owner --subtensor.chain_endpoint $ws_server --no_prompt
 
 # faucet to miner and validator wallets will be run once i.e 300TAO each
-btcli wallet faucet --wallet.name miner_1 --subtensor.chain_endpoint $ws_server --no_prompt
-btcli wallet faucet --wallet.name validator_1 --subtensor.chain_endpoint $ws_server --no_prompt
+# btcli wallet faucet --wallet.name miner_1 --subtensor.chain_endpoint $ws_server --no_prompt
+# btcli wallet faucet --wallet.name validator_1 --subtensor.chain_endpoint $ws_server --no_prompt
 
 # creating subnet
-# btcli subnet create --wallet.name subnet_owner --subtensor.chain_endpoint ws://127.0.0.1:9946 --no_prompt
+btcli subnet create --wallet.name subnet_owner --subtensor.chain_endpoint ws://127.0.0.1:9946 --no_prompt
 
 # register neurons to subnet
-# btcli subnet register --wallet.name miner_1 --wallet.hotkey miner_1_hot --subtensor.chain_endpoint ws://127.0.0.1:9946 --no_prompt --netuid 1
-# btcli subnet register --wallet.name validator_1 --wallet.hotkey validator_1_hot --subtensor.chain_endpoint ws://127.0.0.1:9946 --no_prompt --netuid 1
+btcli subnet register --wallet.name miner_1 --wallet.hotkey miner_1_hot --subtensor.chain_endpoint ws://127.0.0.1:9946 --no_prompt --netuid 1
+btcli subnet register --wallet.name validator_1 --wallet.hotkey validator_1_hot --subtensor.chain_endpoint ws://127.0.0.1:9946 --no_prompt --netuid 1
 
 # staking for validator into subnet
-# btcli stake add --wallet.name validator_1 --wallet.hotkey validator_1_hot --subtensor.chain_endpoint ws://127.0.0.1:9946 --no_prompt --all
+btcli stake add --wallet.name validator_1 --wallet.hotkey validator_1_hot --subtensor.chain_endpoint ws://127.0.0.1:9946 --no_prompt --all
 
 # Now we run the validator and the miner
 # python neurons/miner.py --netuid 1 --subtensor.chain_endpoint ws://127.0.0.1:9946 --wallet.name miner_1 --wallet.hotkey miner_1_hot --logging.debug
