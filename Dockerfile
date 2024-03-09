@@ -39,12 +39,14 @@ COPY requirements.txt ./
 # Install any dependencies specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Append /usr/src/app to PYTHONPATH to ensure custom modules are found
+ENV PYTHONPATH="${PYTHONPATH}:/usr/src/app"
+
 COPY ./subtensor/snapshot.json /
 COPY ./subtensor/raw_spec.json /
 COPY ./subtensor/raw_testspec.json /
 COPY ./subtensor/node-subtensor /usr/local/bin/node-subtensor
 COPY ./subtensor/localnet.sh /subtensor/scripts/localnet.sh
-# COPY ./subtensor/blockchain /tmp/blockchain
 
 # Ensure localnet.sh is executable
 RUN chmod +x /subtensor/scripts/localnet.sh
