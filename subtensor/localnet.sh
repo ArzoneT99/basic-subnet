@@ -20,9 +20,9 @@ if [[ $BUILD_BINARY == "1" ]]; then
 	echo "*** Binary compiled"
 fi
 
-echo "*** Building chainspec..."
-node-subtensor build-spec --disable-default-bootnode --raw --chain $CHAIN > $FULL_PATH
-echo "*** Chainspec built and output to file"
+# echo "*** Building chainspec..."
+# node-subtensor build-spec --disable-default-bootnode --raw --chain $CHAIN > $FULL_PATH
+# echo "*** Chainspec built and output to file"
 
 echo "*** Starting localnet nodes..."
 alice_start=(
