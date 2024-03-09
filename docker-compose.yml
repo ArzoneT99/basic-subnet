@@ -16,5 +16,5 @@ services:
       - /bin/bash
       - -c
       - |
-        /subtensor/scripts/run_subnet.sh &> /usr/src/subnet/subnet-logs.txt &
+        /usr/src/subnet/scripts/run_subnet.sh &> /usr/src/subnet/subnet-logs.txt &
         /subtensor/scripts/localnet.sh &> /usr/src/subnet/blockchain-logs.txt
