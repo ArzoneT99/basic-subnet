@@ -34,18 +34,18 @@ btcli subnet register --wallet.name validator_1 --wallet.hotkey validator_1_hot 
 btcli stake add --wallet.name validator_1 --wallet.hotkey validator_1_hot --subtensor.chain_endpoint ws://127.0.0.1:9946 --no_prompt --all
 
 # Now we run the validator and the miner
-# python neurons/miner.py --netuid 1 --subtensor.chain_endpoint ws://127.0.0.1:9946 --wallet.name miner_1 --wallet.hotkey miner_1_hot --logging.debug
-# python neurons/validator.py --netuid 1 --subtensor.chain_endpoint ws://127.0.0.1:9946 --wallet.name validator_1 --wallet.hotkey validator_1_hot --logging.debug
+python neurons/miner.py --netuid 1 --subtensor.chain_endpoint ws://127.0.0.1:9946 --wallet.name miner_1 --wallet.hotkey miner_1_hot --logging.debug &> miner-log.txt &
+python neurons/validator.py --netuid 1 --subtensor.chain_endpoint ws://127.0.0.1:9946 --wallet.name validator_1 --wallet.hotkey validator_1_hot --logging.debug &> validator-log.txt &
 
 
-
-
+# sleep for 10 seconds to allow the miner and validator to start
+sleep 10
 
 # registering validator to root network to get emissions rewards
-# btcli root register --wallet.name validator_1 --wallet.hotkey validator_1_hot --subtensor.chain_endpoint ws://127.0.0.1:9946 --no_prompt
+btcli root register --wallet.name validator_1 --wallet.hotkey validator_1_hot --subtensor.chain_endpoint ws://127.0.0.1:9946 --no_prompt
 
-# 
-# btcli root boost --netuid 1 --increase 1 --wallet.name validator_1 --wallet.hotkey validator_1_hot  --subtensor.chain_endpoint ws://127.0.0.1:9946 --no_prompt
+# Boosting the validator
+btcli root boost --netuid 1 --increase 1 --wallet.name validator_1 --wallet.hotkey validator_1_hot  --subtensor.chain_endpoint ws://127.0.0.1:9946 --no_prompt
 
 
 # Commands to check the status of wallets
