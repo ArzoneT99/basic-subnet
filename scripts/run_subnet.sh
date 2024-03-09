@@ -2,6 +2,9 @@
 
 ws_server="ws://127.0.0.1:9946"
 
+# Sleep for 5 seconds to allow the chain to start
+sleep 5
+
 # Regenerate keys for subnet owner, validator and miner
 btcli w regen_coldkey  --wallet.name subnet_owner --no_password --no_prompt --mnemonic common during year embark silent provide reflect shield catch roast addict ride
 btcli w regen_coldkey  --wallet.name validator_1 --no_password --no_prompt --mnemonic clarify carry wrestle horn width donor buddy drill tone ring true stomach
@@ -39,13 +42,13 @@ python neurons/validator.py --netuid 1 --subtensor.chain_endpoint ws://127.0.0.1
 
 
 # sleep for 10 seconds to allow the miner and validator to start
-sleep 10
+#sleep 10
 
 # registering validator to root network to get emissions rewards
-btcli root register --wallet.name validator_1 --wallet.hotkey validator_1_hot --subtensor.chain_endpoint ws://127.0.0.1:9946 --no_prompt
+#btcli root register --wallet.name validator_1 --wallet.hotkey validator_1_hot --subtensor.chain_endpoint ws://127.0.0.1:9946 --no_prompt
 
 # Boosting the validator
-btcli root boost --netuid 1 --increase 1 --wallet.name validator_1 --wallet.hotkey validator_1_hot  --subtensor.chain_endpoint ws://127.0.0.1:9946 --no_prompt
+#btcli root boost --netuid 1 --increase 1 --wallet.name validator_1 --wallet.hotkey validator_1_hot  --subtensor.chain_endpoint ws://127.0.0.1:9946 --no_prompt
 
 
 # Commands to check the status of wallets
