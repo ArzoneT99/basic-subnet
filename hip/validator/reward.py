@@ -1,35 +1,43 @@
 import torch
 from typing import List
 
-
-def reward(query: int, response: int) -> float:
+def reward(selected_option: str, ground_truth: str) -> float:
     """
-    Reward the miner response to the dummy request. This method returns a reward
-    value for the miner, which is used to update the miner's score.
-
+    Calculate the reward for a miner's selected option based on the ground truth.
+    Args:
+        selected_option (str): Miner's selected option ("Human", "AI", or "Unsure").
+        ground_truth (str): Ground truth established by the validator ("Human" or "AI").
     Returns:
-    - float: The reward value for the miner.
+        float: Reward value for the miner's selected option.
     """
-
-    return 1.0 if response == query * 2 else 0
-
+    if selected_option == ground_truth:
+        return 1.0
+    elif selected_option == "Unsure":
+        return 0.5
+    else:
+        return 0.0
 
 def get_rewards(
     self,
-    query: int,
-    responses: List[float],
+    selected_options: List[str],
+    ground_truth_task1: str,
+    ground_truth_task2: str,
 ) -> torch.FloatTensor:
     """
-    Returns a tensor of rewards for the given query and responses.
-
+    Calculate the rewards for a list of miner selected options based on the ground truth for each task.
     Args:
-    - query (int): The query sent to the miner.
-    - responses (List[float]): A list of responses from the miner.
-
+        selected_options (List[str]): List of miner selected options.
+        ground_truth_task1 (str): Ground truth for task1 ("Human" or "AI").
+        ground_truth_task2 (str): Ground truth for task2 ("Human" or "AI").
     Returns:
-    - torch.FloatTensor: A tensor of rewards for the given query and responses.
+        torch.FloatTensor: Tensor of reward values for each miner selected option.
     """
-    # Get all the reward results by iteratively calling your reward() function.
-    return torch.FloatTensor(
-        [reward(query, response) for response in responses]
-    ).to(self.device)
+    rewards = []
+    for i, option in enumerate(selected_options):
+        if i < len(selected_options) // 2:
+            # First half of options correspond to task1
+            rewards.append(reward(option, ground_truth_task1))
+        else:
+            # Second half of options correspond to task2
+            rewards.append(reward(option, ground_truth_task2))
+    return torch.FloatTensor(rewards).to(self.device)

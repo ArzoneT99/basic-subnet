@@ -21,6 +21,33 @@ import bittensor as bt
 #   assert dummy_output == 2
 
 
+class HIPProtocol(bt.Synapse):
+    # Required fields
+    query: str
+    query_type: str
+    uid: int
+    options: typing.List[str] = ["Human", "AI", "Unsure"]
+
+    # Optional fields
+    response: typing.Optional[str] = None
+    score: typing.Optional[float] = None
+    ground_truth: typing.Optional[str] = None
+    weights: typing.Optional[typing.List[float]] = None
+
+    def serialize(self) -> bytes:
+        """
+        Serialize the HIPProtocol instance to bytes.
+        """
+        return bt.serialize(self)
+
+    @classmethod
+    def deserialize(cls, data: bytes) -> 'HIPProtocol':
+        """
+        Deserialize bytes to a HIPProtocol instance.
+        """
+        return bt.deserialize(data, HIPProtocol)
+
+
 class Dummy(bt.Synapse):
     """
     A simple dummy protocol representation which uses bt.Synapse as its base.

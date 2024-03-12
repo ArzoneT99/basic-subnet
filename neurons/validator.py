@@ -1,6 +1,5 @@
 import time
 import bittensor as bt
-import hip
 from hip.validator import forward
 from hip.base.validator import BaseValidatorNeuron
 
@@ -22,6 +21,7 @@ class Validator(BaseValidatorNeuron):
 
         # TODO(developer): Anything specific to your use case you can do here
 
+    
     async def forward(self):
         """
         Validator forward pass. Consists of:
@@ -31,7 +31,6 @@ class Validator(BaseValidatorNeuron):
         - Rewarding the miners
         - Updating the scores
         """
-        # TODO(developer): Rewrite this function based on your protocol definition.
         return await forward(self)
 
 
