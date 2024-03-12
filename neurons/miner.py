@@ -2,7 +2,7 @@ import time
 import typing
 import bittensor as bt
 
-# Bittensor Miner Template:
+# Bittensor Miner Template:-
 import template
 
 # import base miner class which takes care of most of the boilerplate
