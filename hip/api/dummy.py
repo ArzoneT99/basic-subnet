@@ -1,6 +1,6 @@
 import bittensor as bt
 from typing import List, Optional, Union, Any, Dict
-from template.protocol import Dummy
+from hip.protocol import Dummy
 from bittensor.subnets import SubnetsAPI
 
 

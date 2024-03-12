@@ -1,11 +1,7 @@
 import time
 import typing
 import bittensor as bt
-
-# Bittensor Miner Template:-
 import hip
-
-# import base miner class which takes care of most of the boilerplate
 from hip.base.miner import BaseMinerNeuron
 
 
