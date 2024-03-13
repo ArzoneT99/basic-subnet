@@ -1,5 +1,7 @@
 import torch
 from typing import List
+from hip.protocol import HIPProtocol
+
 
 def reward(selected_option: str, ground_truth: str) -> float:
     """
@@ -16,6 +18,7 @@ def reward(selected_option: str, ground_truth: str) -> float:
         return 0.5
     else:
         return 0.0
+
 
 def weighted_means_consensus(self, options: List[str], weights: List[float]) -> str:
     """
@@ -34,10 +37,12 @@ def weighted_means_consensus(self, options: List[str], weights: List[float]) -> 
     }
 
     # Convert options to numeric values
-    numeric_options = [option_values[option] for option in options if option in option_values]
+    numeric_options = [option_values[option]
+                       for option in options if option in option_values]
 
     # Calculate the weighted mean
-    weighted_mean = sum([value * weight for value, weight in zip(numeric_options, weights)]) / sum(weights)
+    weighted_mean = sum([value * weight for value,
+                        weight in zip(numeric_options, weights)]) / sum(weights)
 
     # Determine the consensus option based on the weighted mean
     if weighted_mean >= 1.5:
@@ -47,23 +52,20 @@ def weighted_means_consensus(self, options: List[str], weights: List[float]) -> 
     else:
         return "Not Human-like"
 
+
 def get_rewards(
     self,
-    selected_options: List[str],
-    weights: List[float],
+    responses: List[HIPProtocol],
+    ground_truths: List[str],
 ) -> torch.FloatTensor:
     """
-    Calculate the rewards for a list of miner selected options based on the weighted means consensus.
+    Calculate the rewards for a list of miner responses based on the ground truths.
     Args:
-        selected_options (List[str]): List of miner selected options.
-        weights (List[float]): List of weights corresponding to each miner's option.
+        responses (List[HIPProtocol]): List of miner responses.
+        ground_truths (List[str]): List of ground truths corresponding to each response.
     Returns:
         torch.FloatTensor: Tensor of reward values for each miner.
     """
-    # Calculate the consensus using weighted means
-    consensus_option = self.weighted_means_consensus(selected_options, weights)
-
-    # Calculate the rewards based on the consensus
-    rewards = [reward(option, consensus_option) for option in selected_options]
-
+    rewards = [reward(r.response, gt)
+               for r, gt in zip(responses, ground_truths)]
     return torch.FloatTensor(rewards).to(self.device)
