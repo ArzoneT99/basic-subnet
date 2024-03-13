@@ -4,62 +4,57 @@ from hip.validator.reward import get_rewards
 from hip.utils.uids import get_random_uids
 
 async def forward(self):
+    """
+    The forward function is called by the validator every time step.
+    It is responsible for querying the network and scoring the responses.
+    """
     # Get the total number of active miners
     active_miners = len(self.metagraph.uids)
 
-    # Calculate the group size based on the number of active miners
-    group_size = min(active_miners // 2, self.config.neuron.sample_size)
+    # Calculate the number of groups based on the number of active miners
+    num_groups = max(1, min(32, active_miners // 8))
 
-    # Select random miner UIDs for group1
-    group1_uids = get_random_uids(self, k=group_size)
+    # Calculate the group size based on the number of active miners and groups
+    group_size = active_miners // num_groups
 
-    # Select random miner UIDs for group2, excluding the UIDs from group1
-    group2_uids = get_random_uids(self, k=group_size, exclude=group1_uids.tolist())
+    # Assign miners to groups
+    miner_groups = [[] for _ in range(num_groups)]
+    for i, uid in enumerate(self.metagraph.uids):
+        group_index = i % num_groups
+        miner_groups[group_index].append(uid)
 
     # Generate tasks for each group
-    task1 = self.generate_task()
-    task2 = self.generate_task()
+    tasks = [self.generate_task() for _ in range(num_groups)]
 
-    # Query the first group of miners with task1
-    responses_group1_task1 = await self.dendrite(
-        axons=[self.metagraph.axons[uid] for uid in group1_uids],
-        synapse=[HIPProtocol(query=task1, query_type="task1", uid=uid) for uid in group1_uids],
-        deserialize=True,
-    )
+    # Query each group of miners with their respective task
+    responses_by_group = []
+    for group_index, group_uids in enumerate(miner_groups):
+        responses = await self.dendrite(
+            axons=[self.metagraph.axons[uid] for uid in group_uids],
+            synapse=[HIPProtocol(data=tasks[group_index], uid=uid) for uid in group_uids],
+            deserialize=True,
+        )
+        responses_by_group.append(responses)
 
-    # Query the second group of miners with task2
-    responses_group2_task2 = await self.dendrite(
-        axons=[self.metagraph.axons[uid] for uid in group2_uids],
-        synapse=[HIPProtocol(query=task2, query_type="task2", uid=uid) for uid in group2_uids],
-        deserialize=True,
-    )
+    # Establish ground truth for each group based on responses
+    ground_truths = [self.establish_ground_truth(responses) for responses in responses_by_group]
 
-    # Establish ground truth for task1 based on responses from group1
-    ground_truth_task1 = self.establish_ground_truth(responses_group1_task1)
+    # Query each group of miners with the ground truth from the other groups
+    cross_validated_responses = []
+    for group_index, group_uids in enumerate(miner_groups):
+        other_group_indices = [i for i in range(num_groups) if i != group_index]
+        other_ground_truths = [ground_truths[i] for i in other_group_indices]
+        responses = await self.dendrite(
+            axons=[self.metagraph.axons[uid] for uid in group_uids],
+            synapse=[HIPProtocol(data=tasks[group_index], uid=uid, consensus=truth) for uid, truth in zip(group_uids, other_ground_truths)],
+            deserialize=True,
+        )
+        cross_validated_responses.extend(responses)
 
-    # Establish ground truth for task2 based on responses from group2
-    ground_truth_task2 = self.establish_ground_truth(responses_group2_task2)
+    # Calculate rewards based on responses and ground truths
+    rewards = get_rewards(self, cross_validated_responses, ground_truths)
 
-    # Query the first group of miners with task2 and ground truth
-    responses_group1_task2 = await self.dendrite(
-        axons=[self.metagraph.axons[uid] for uid in group1_uids],
-        synapse=[HIPProtocol(query=task2, query_type="task2", uid=uid, ground_truth=ground_truth_task2) for uid in group1_uids],
-        deserialize=True,
-    )
-
-    # Query the second group of miners with task1 and ground truth
-    responses_group2_task1 = await self.dendrite(
-        axons=[self.metagraph.axons[uid] for uid in group2_uids],
-        synapse=[HIPProtocol(query=task1, query_type="task1", uid=uid, ground_truth=ground_truth_task1) for uid in group2_uids],
-        deserialize=True,
-    )
-
-    # Calculate rewards based on responses and ground truth
-    rewards_group1 = get_rewards(self, responses_group1_task1 + responses_group1_task2, ground_truth_task1, ground_truth_task2)
-    rewards_group2 = get_rewards(self, responses_group2_task1 + responses_group2_task2, ground_truth_task1, ground_truth_task2)
-   
-   # Update scores based on rewards
-    self.update_scores(rewards_group1, group1_uids)
-    self.update_scores(rewards_group2, group2_uids)
+    # Update scores based on rewards
+    self.update_scores(rewards, self.metagraph.uids)
 
     bt.logging.info("Validator forward pass completed")
