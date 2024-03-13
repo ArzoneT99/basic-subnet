@@ -5,10 +5,8 @@ class HIPProtocol(bt.Synapse):
     # Required fields
     data: str
     uid: int
-
-    # Optional fields
     response: typing.Optional[str] = None
-    consensus: typing.Optional[str] = None
+    incentive: typing.Optional[str] = None
     weights: typing.Optional[typing.List[float]] = None
 
     def serialize(self) -> bytes:
