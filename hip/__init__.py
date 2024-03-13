@@ -32,4 +32,5 @@ from . import protocol
 from . import base
 from . import validator
 from . import api
+from . import hip_service
 from .subnet_links import SUBNET_LINKS

@@ -3,6 +3,7 @@ from hip.protocol import HIPProtocol
 from hip.validator.reward import get_rewards, weighted_means_consensus
 from hip.utils.uids import get_random_uids
 import asyncio
+from hip_service import SocketIOClient
 
 async def forward(self):
     """
@@ -26,8 +27,18 @@ async def forward(self):
     # Assign random UIDs to groups
     miner_groups = [get_random_uids(self, k=group_size) for _ in range(num_groups)]
 
-    # Generate tasks for each group
-    tasks = [self.generate_task() for _ in range(num_groups)]
+    # Generate tasks for each group using data from the WebSocket server
+    tasks = []
+    client = SocketIOClient()
+    await client.connect("wss://hipservice-production.up.railway.app")
+    for _ in range(num_groups):
+        completion = await client.getRandomCompletion()
+        if completion is not None:
+            task = self.generate_task(completion)
+            tasks.append(task)
+        else:
+            bt.logging.warning("Failed to retrieve random completion from the WebSocket server.")
+    await client.close()
 
     # Query each group of miners with their respective task
     responses_by_group = []
