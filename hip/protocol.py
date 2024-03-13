@@ -6,7 +6,7 @@ class HIPProtocol(bt.Synapse):
     query: str
     query_type: str
     uid: int
-    options: typing.List[str] = ["Human", "AI", "Unsure"]
+    options: typing.List[str] = ["Very Human-like", "Somewhat Human-like", "Not Human-like", "Unsure"]
     
     # Optional fields
     response: typing.Optional[str] = None
