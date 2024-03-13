@@ -1,6 +1,6 @@
-# HIP (Human Incentive Protocol) Consensus Mechanism
+# HIP (Human Intelligence Primitave) Consensus Mechanism
 
-The HIP consensus mechanism is designed to incentivize and reward human miners for their contributions in determining whether data is human-generated or machine-generated. The primary goal of the HIP subnet is to prevent Bittensor from becoming a dark forest, where malicious actors can manipulate the network for their own benefit. By leveraging human intuition and judgment, the HIP consensus mechanism aims to maintain the integrity and trustworthiness of the Bittensor network.
+The HIP consensus mechanism is designed to incentivize and reward human miners for their contributions in determining whether data is human-like. The primary goal of the HIP subnet is to prevent Bittensor from becoming a dark forest, where malicious actors can manipulate the network for their own benefit. By leveraging human intuition and judgment, the HIP consensus mechanism aims to maintain the integrity and trustworthiness of the Bittensor network.
 
 # Code Overview
 
@@ -15,8 +15,6 @@ The `protocol.py` file defines the communication protocol between subnet validat
 - `uid`: The unique identifier of the miner.
 - `options`: The list of options available for the miner to select from.
 - `response`: The miner's selected option in response to the query.
-- `score`: The score assigned by the validator to the miner's response.
-- `ground_truth`: The ground truth established by the validator based on initial miner responses.
 - `weights`: The weights assigned by the validator to the miner's response.
 
 The `HIPProtocol` class also provides `serialize` and `deserialize` methods to convert the protocol instance to bytes and vice versa for network transmission.
@@ -30,7 +28,7 @@ The `miner.py` file contains the `Miner` class, which represents a miner in the 
 - `forward`: Processes the incoming `HIPProtocol` synapse by selecting an option based on the query and available options.
 - `blacklist`: Determines if an incoming request should be blacklisted based on the miner's configuration and the request's hotkey.
 - `priority`: Assigns priority to incoming requests based on the caller's stake.
-- `select_option`: Presents the query and options to the user through an interface and retrieves the selected option.
+- `select_option`: Sends the query and options to the user and retrieves the selected option.
 - `present_options_to_user`: A placeholder for implementing the logic to present the query and options to the user through an interface.
 
 ## 3. validator.py
