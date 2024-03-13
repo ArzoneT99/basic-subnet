@@ -11,18 +11,17 @@ class Miner(BaseMinerNeuron):
 
     async def forward(self, synapse: hip.protocol.HIPProtocol) -> hip.protocol.HIPProtocol:
         """
-        Process the incoming HIPProtocol synapse by selecting an option based on the query.
+        Process the incoming HIPProtocol synapse by selecting an option based on the task.
         """
-        if synapse.query_type == "task1":
-            # Select an option for task1
-            synapse.response = await self.select_option(synapse.query, synapse.options)
-        elif synapse.query_type == "task2":
-            # Select an option for task2
-            synapse.response = await self.select_option(synapse.query, synapse.options)
-        else:
-            # Handle unknown query types
-            synapse.response = "Unsure"
-        
+        # Extract the task data from the synapse
+        task_data = synapse.data
+
+        # Determine the human-likeness of the task data
+        human_likeness = await self.evaluate_human_likeness(task_data)
+
+        # Set the miner's response in the synapse
+        synapse.response = human_likeness
+
         return synapse
 
     async def blacklist(self, synapse: hip.protocol.HIPProtocol) -> typing.Tuple[bool, str]:
@@ -52,27 +51,30 @@ class Miner(BaseMinerNeuron):
         bt.logging.trace(f"Prioritizing {synapse.dendrite.hotkey} with value: {priority}")
         return priority
 
-    async def select_option(self, query: str, options: typing.List[str]) -> str:
+    async def evaluate_human_likeness(self, task_data: str) -> str:
         """
-        Select an option based on the given query and available options.
+        Evaluate the human-likeness of the given task data.
         """
-        try: # Present the query and options to the user through an interface
-            selected_option = await self.present_options_to_user(query, options)
-            bt.logging.debug(f"User selected option '{selected_option}' for query: {query}")
-            return selected_option
+        try:
+            # Present the task data to the user through an interface
+            human_likeness = await self.present_task_to_user(task_data)
+            bt.logging.debug(f"User evaluated human-likeness as '{human_likeness}' for task data: {task_data}")
+            return human_likeness
         except Exception as e:
-            bt.logging.error(f"Error selecting option for query: {query}. Error: {str(e)}")
+            bt.logging.error(f"Error evaluating human-likeness for task data: {task_data}. Error: {str(e)}")
             return "Unsure"
 
-    async def present_options_to_user(self, query: str, options: typing.List[str]) -> str:
+    async def present_task_to_user(self, task_data: str) -> str:
         """
-        Present the query and options to the user through an interface and return the selected option.
+        Present the task data to the user through an interface and return the evaluated human-likeness.
         """
-    # TODO: Implement the logic to present the query and options to the user through an interface
-    # and return the selected option
-    # For now, we'll simulate user selection by randomly choosing an option
-        selected_option = random.choice(options)
-        return selected_option
+        # TODO: Implement the logic to present the task data to the user through an interface
+        # and return the evaluated human-likeness
+        # For now, we'll simulate user evaluation by randomly selecting a human-likeness option
+        options = ["Very Human-like", "Somewhat Human-like", "Not Human-like", "Unsure"]
+        human_likeness = random.choice(options)
+        return human_likeness
+
 # This is the main function, which runs the miner.
 if __name__ == "__main__":
     with Miner() as miner:
