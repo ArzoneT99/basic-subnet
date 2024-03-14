@@ -1,9 +1,7 @@
 import time
-
 import asyncio
 import random
 import bittensor as bt
-
 from typing import List
 
 
