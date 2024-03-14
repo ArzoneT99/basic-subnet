@@ -2,16 +2,13 @@ import sys
 import torch
 import unittest
 import bittensor as bt
-
-from neurons.validator import Neuron as Validator
-from neurons.miner import Neuron as Miner
-
-from hip.protocol import Dummy
+from neurons.validator import Validator as Validator
+from neurons.miner import Miner as Miner
+from hip.protocol import HIPProtocol
 from hip.validator.forward import forward
 from hip.utils.uids import get_random_uids
 from hip.validator.reward import get_rewards
 from hip.base.validator import BaseValidatorNeuron
-
 
 class TemplateValidatorNeuronTestCase(unittest.TestCase):
     """
@@ -22,7 +19,7 @@ class TemplateValidatorNeuronTestCase(unittest.TestCase):
     """
 
     def setUp(self):
-        sys.argv = sys.argv[0] + ["--config", "tests/configs/validator.json"]
+        sys.argv = [sys.argv[0]] + ["--config", "tests/configs/validator.json"]
 
         config = BaseValidatorNeuron.config()
         config.wallet._mock = True
@@ -30,18 +27,23 @@ class TemplateValidatorNeuronTestCase(unittest.TestCase):
         config.subtensor._mock = True
         self.neuron = Validator(config)
         self.miner_uids = get_random_uids(self, k=10)
-
+        
     def test_run_single_step(self):
-        # TODO: Test a single step
-        pass
+        # Test a single step
+        self.neuron.run_single_step()
 
     def test_sync_error_if_not_registered(self):
-        # TODO: Test that the validator throws an error if it is not registered on metagraph
-        pass
+        # Test that the validator throws an error if it is not registered on metagraph
+        with self.assertRaises(Exception):
+            self.neuron.config.metagraph._mock = False
+            self.neuron.run_single_step()
 
     def test_forward(self):
-        # TODO: Test that the forward function returns the correct value
-        pass
+        # Test that the forward function returns the correct value
+        uids = get_random_uids(self, k=10)
+        inputs = torch.randn(10, 1024)
+        outputs = forward(self.neuron, uids, inputs)
+        self.assertEqual(outputs.shape, (10, 1024))
 
     def test_dummy_responses(self):
         # TODO: Test that the dummy responses are correctly constructed
@@ -52,7 +54,7 @@ class TemplateValidatorNeuronTestCase(unittest.TestCase):
                 self.neuron.metagraph.axons[uid] for uid in self.miner_uids
             ],
             # Construct a dummy query.
-            synapse=Dummy(dummy_input=self.neuron.step),
+            synapse=HIPProtocol(dummy_input=self.neuron.step),
             # All responses have the deserialize function called on them before returning.
             deserialize=True,
         )
@@ -62,11 +64,11 @@ class TemplateValidatorNeuronTestCase(unittest.TestCase):
 
     def test_reward(self):
         # TODO: Test that the reward function returns the correct value
-        responses = self.dendrite.query(
+        responses = self.neuron.dendrite.query(
             # Send the query to miners in the network.
             axons=[self.metagraph.axons[uid] for uid in self.miner_uids],
             # Construct a dummy query.
-            synapse=Dummy(dummy_input=self.neuron.step),
+            synapse=HIPProtocol(dummy_input=self.neuron.step),
             # All responses have the deserialize function called on them before returning.
             deserialize=True,
         )
@@ -78,11 +80,11 @@ class TemplateValidatorNeuronTestCase(unittest.TestCase):
     def test_reward_with_nan(self):
         # TODO: Test that NaN rewards are correctly sanitized
         # TODO: Test that a bt.logging.warning is thrown when a NaN reward is sanitized
-        responses = self.dendrite.query(
+        responses = self.neuron.dendrite.query(
             # Send the query to miners in the network.
             axons=[self.metagraph.axons[uid] for uid in self.miner_uids],
             # Construct a dummy query.
-            synapse=Dummy(dummy_input=self.neuron.step),
+            synapse=HIPProtocol(dummy_input=self.neuron.step),
             # All responses have the deserialize function called on them before returning.
             deserialize=True,
         )
