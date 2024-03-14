@@ -9,6 +9,7 @@ from hip.validator.forward import forward
 from hip.utils.uids import get_random_uids
 from hip.validator.reward import get_rewards
 from hip.base.validator import BaseValidatorNeuron
+#WORK
 
 class TemplateValidatorNeuronTestCase(unittest.TestCase):
     """
