@@ -118,3 +118,9 @@ class MockDendrite(bt.dendrite):
             str: The string representation of the Dendrite object in the format "dendrite(<user_wallet_address>)".
         """
         return "MockDendrite({})".format(self.keypair.ss58_address)
+
+if __name__ == "__main__":
+    mock_wallet = bt.Wallet(name="_Mock")
+    mock_subtensor = MockSubtensor(netuid=1, wallet=mock_wallet)
+    mock_metagraph = MockMetagraph(subtensor=mock_subtensor)
+    axons = mock_metagraph.axons
