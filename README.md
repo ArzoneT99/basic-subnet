@@ -1,6 +1,6 @@
 # HIP (Human Intelligence Primitave) Insentive Mechanism
 
-The HIP consensus mechanism is designed to incentivize and reward human miners for their contributions in determining whether data is human-like. The primary goal of the HIP subnet is to prevent Bittensor from becoming a dark forest, where malicious actors can manipulate the network for their own benefit. By leveraging human intuition and judgment, the HIP consensus mechanism aims to maintain the integrity and trustworthiness of the Bittensor network.
+The HIP insentive mechanism is designed to incentivize and reward human miners for their contributions in determining whether data is human-like. The primary goal of the HIP subnet is to prevent Bittensor from becoming a dark forest, where malicious actors can manipulate the network for their own benefit. By leveraging human intuition and judgment, the HIP consensus mechanism aims to maintain the integrity and trustworthiness of the Bittensor network.
 
 # Code Overview
 
@@ -61,9 +61,9 @@ The `reward.py` file defines the reward calculation and distribution logic for t
 - `weighted_means_consensus`: Calculates the consensus option based on the selected options and their corresponding weights using the weighted means approach.
 - `get_rewards`: Calculates the rewards for a list of miner selected options based on the weighted means consensus.
 
-# Consensus Mechanism Analogy: Teachers with Two Classes of Students
+# Insentive Mechanism Analogy: Teachers with Two Classes of Students
 
-Imagine two teachers, each responsible for a class of students. The teachers are tasked with evaluating the students' understanding of a particular subject matter. In this analogy, the teachers represent the validators, and the students represent the miners in the HIP consensus mechanism.
+Imagine two teachers, each responsible for a class of students. The teachers are tasked with evaluating the students' understanding of a particular subject matter. In this analogy, the teachers represent the validators, and the students represent the miners in the HIP insentive mechanism.
 
 1. **Task Assignment:**
    - Each teacher (validator) prepares a set of questions (tasks) related to the subject matter.
@@ -91,10 +91,10 @@ Imagine two teachers, each responsible for a class of students. The teachers are
    - Students who provided accurate responses that match the consensus answer receive higher rewards, while those who were unsure or provided incorrect responses receive lower rewards.
    - The rewards are distributed to the students (miners) based on their performance and contribution to the consensus.
 
-Through this analogy, we can see how the HIP consensus mechanism works to achieve consensus on whether data is human-generated or machine-generated. The validators (teachers) coordinate the tasks, establish ground truth, and calculate the consensus, while the miners (students) provide their opinions and judgments. The rewards are distributed based on the miners' performance and alignment with the consensus, incentivizing them to contribute intuitvly to the network.
+Through this analogy, we can see how the HIP inctentive mechanism works to achieve consensus on whether data is human-generated or machine-generated. The validators (teachers) coordinate the tasks, establish ground truth, and calculate the consensus, while the miners (students) provide their opinions and judgments. The rewards are distributed based on the miners' performance and alignment with the consensus, incentivizing them to contribute intuitvly to the network.
 
 
-The HIP consensus mechanism can be summarized as follows:
+The HIP incentive mechanism can be summarized as follows:
 1. Validators generate tasks and assign them to miners.
 2. Miners provide responses to the tasks.
 3. Validators establish the ground truth based on the majority vote of miner responses.
