@@ -11,4 +11,4 @@ python-socketio==5.11.1
 simple-websocket==1.0.0
 wsproto==1.2.0
 yarl==1.9.4
-bittensor==6.9.2
+bittensor==6.8.2
