@@ -1,4 +1,4 @@
-# HIP (Human Intelligence Primitave) Consensus Mechanism
+# HIP (Human Intelligence Primitave) Insentive Mechanism
 
 The HIP consensus mechanism is designed to incentivize and reward human miners for their contributions in determining whether data is human-like. The primary goal of the HIP subnet is to prevent Bittensor from becoming a dark forest, where malicious actors can manipulate the network for their own benefit. By leveraging human intuition and judgment, the HIP consensus mechanism aims to maintain the integrity and trustworthiness of the Bittensor network.
 
