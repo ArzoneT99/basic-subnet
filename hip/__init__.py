@@ -11,4 +11,4 @@ from . import protocol
 from . import base
 from . import validator
 from . import mock
-from .subnet_links import SUBNET_LINKS
+from . import hip_service
