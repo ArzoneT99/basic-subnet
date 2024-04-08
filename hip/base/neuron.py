@@ -5,11 +5,10 @@ import bittensor as bt
 
 from abc import ABC, abstractmethod
 
-# Sync calls set weights and also resyncs the metagraph.
+
 from hip.utils.config import check_config, add_args, config
 from hip.utils.misc import ttl_get_block
-from hip import __spec_version__ as spec_version
-from hip.mock import MockSubtensor, MockMetagraph
+
 
 
 class BaseNeuron(ABC):
@@ -36,7 +35,7 @@ class BaseNeuron(ABC):
     subtensor: "bt.subtensor"
     wallet: "bt.wallet"
     metagraph: "bt.metagraph"
-    spec_version: int = spec_version
+    
 
     @property
     def block(self):
@@ -62,18 +61,9 @@ class BaseNeuron(ABC):
         bt.logging.info("Setting up bittensor objects.")
 
         # The wallet holds the cryptographic key pairs for the miner.
-        if self.config.mock:
-            self.wallet = bt.MockWallet(config=self.config)
-            self.subtensor = MockSubtensor(
-                self.config.netuid, wallet=self.wallet
-            )
-            self.metagraph = MockMetagraph(
-                self.config.netuid, subtensor=self.subtensor
-            )
-        else:
-            self.wallet = bt.wallet(config=self.config)
-            self.subtensor = bt.subtensor(config=self.config)
-            self.metagraph = self.subtensor.metagraph(self.config.netuid)
+        self.wallet = bt.wallet(config=self.config)
+        self.subtensor = bt.subtensor(config=self.config)
+        self.metagraph = self.subtensor.metagraph(self.config.netuid)
 
         bt.logging.info(f"Wallet: {self.wallet}")
         bt.logging.info(f"Subtensor: {self.subtensor}")
